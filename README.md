@@ -21,3 +21,24 @@ The sources are copyied from original repositories and not linked. Therefore thi
 |SMASH-analysis|SMASH-2.2ana|
 |SMASH-hadron-sampler|SMASH-hadron-sampler-1.1|
 |SMASH-vhlle-hybrid|master from 2022-24-10 (af49b95)|
+
+# Changes compared to the original sources
+## CMake smash, hadron-sampler
+* removed check of cxx standard (we expect it to be at least c++17)
+* removed check of Endian (we target mainly x86-64 which uses little-endian)
+* removed -march=native flag (flags are set from external environment)
+* removed EXECUTABLE_OUTPUT_PATH (we use global CMAKE_INSTALL_PREFIX)
+* moved sources from src to src/SMASH, src/hadron-sampler
+* BUILD_TESTING switched by default to NO
+* removed doc directory (for documentation refer to the original project)
+* added python tests from analysis and hybrid
+* renamed sampler to hadron_sampler
+## CMake smash-analysis
+* created directory share/smashAnalysis containing (original) python_scripts/, test/, and CMakeLists.txt.
+  These are copied to SMASH_PACK_ROOT/share/ during install phase
+* moved .sh files to directory scripts. On install they are put into /bin
+* removed gitstats
+* search for Python (modules) moved to the main CMake. Analytics EXPECTS that modules are OK
+* removed search for smash. It is expected to be in $SMASH_ROOT_PATH/bin/smash
+* removed include(FloatMath) and replaced by given function in files that needed it (2 of 3 requesting)
+* replaced ${CMAKE_BINARY_DIR}/smash by ${SMASH_PACK_ROOT}/bin/smash

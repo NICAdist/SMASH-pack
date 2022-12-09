@@ -1,0 +1,6 @@
+#!/bin/bash
+$CMAKE_ROOT/bin/cmake $SMASH_PACK_ROOT/share/smashAnalysis \
+                      -DSMASH_PACK_ROOT=$SMASH_PACK_ROOT
+
+#path to experimental data              -DEXP_DATA=/some/path/to/data  \
+#path to particles list for afterburner -DSAMPLED_LISTS=/link/to/lists \
