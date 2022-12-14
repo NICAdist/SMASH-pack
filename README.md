@@ -42,3 +42,14 @@ The sources are copyied from original repositories and not linked. Therefore thi
 * removed search for smash. It is expected to be in $SMASH_ROOT_PATH/bin/smash
 * removed include(FloatMath) and replaced by given function in files that needed it (2 of 3 requesting)
 * replaced ${CMAKE_BINARY_DIR}/smash by ${SMASH_PACK_ROOT}/bin/smash
+
+## CMake smashVHLLEhybrid
+* created directory share/smashVHLLEhyubrid containing (original) configs/, python_scripts/, and CMakeLists.txt. These are copied to SMASH_PACK_ROOT/share/ during install phase
+* search for Python (modules) moved to the main CMake. Analytics EXPECTS that modules are OK
+* removed search for smash, hlle_visc, and sampler. hlle_visc is expected to be inside ${VHLLE_ROOT}/bin, smash inside ${SMASH_PACK_ROOT}/bin. sampler was renamed to hadron_sampler and also resides inside ${SMASH_PACK_ROOT}/bin.
+* removed search for and copying of eos as they are not used anywhere. If one needs eos, than ${VHLLE_ROOT}/data/eos should be used to avoid unnecessary copying of large amount of data
+* removed test of SMASH_ANALYSIS presence since we know, we have it
+* removed all connected to FLOW as it is not clear what package it is and how to install/use it
+* removed calls to functions. They are now user-provided via file and parameter SMASH_ANALYSES
+* removed hard-coded constants. User now can either alter individual constants via -Dconstant_name or set all (subset) of constants via file and parameter SMASH_SETTINGS
+* added new folder "Progress" to results for tracking work of program and recreated dependencies in the program so that commands are called one-by one for each 'i' in cycle (allowing for make -j)

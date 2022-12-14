@@ -1,1 +1,122 @@
 #!/bin/bash
+
+main () {
+  # exit when any command fails
+  set -e
+
+  SHORT=d,p:,t:,h
+  LONG=demo,parameters:,tests:,help
+  OPTS=$(getopt -a -n smashVHLLEhybrid --options $SHORT --longoptions $LONG -- "$@")
+
+  VALID_ARGUMENTS=$# # Returns the count of arguments that are in short or long options
+
+  if [ "$VALID_ARGUMENTS" -eq 0 ]; then
+    print_usage
+  fi
+
+  eval set -- "$OPTS"
+  while :
+  do
+    case "$1" in
+      -p | --parameters )
+        parameterFile="$2"
+        shift 2
+        ;;
+      -t | --tests )
+        testFile="$2"
+        shift 2
+        ;;
+      -h | --help)
+        print_usage
+        exit 0
+        ;;
+      -d | --demo )
+        create_demo_files
+        exit 0
+        ;;
+      --)
+        shift;
+        break
+        ;;
+      *)
+        echo "Unexpected option: $1"
+        ;;
+    esac
+  done
+
+  # check if user has provided parameters file
+  if [[ -z ${testFile} ]];then
+    echo "Error. Missing name of tests file (-t) which is obligattory."
+    exit 1
+  fi
+
+  run_cmake
+}
+
+function print_usage()
+{
+  echo "smashVHLLEhybrid - script to make makefiles for smashVHLLEhybrid"
+  echo "Usage:"
+  echo "    smashVHLLEhybrid -t 'testFile.txt' [-p 'parameterFile.txt]"
+  echo "where"
+  echo "    testFile.txt - file containing list of tests to be created"
+  echo "    parameterFile.txt - (optional) file containing parametter setting (numbers of cycle repetitions) for tests to be run"
+  echo "Run:"
+  echo "    smashVHLLEhybrid -d"
+  echo "and you will get two demo files testFile.txt and parameterFile.txt that you can adapt to your needs"
+}
+
+function create_demo_files()
+{
+cat > "testFile.txt" <<EoF
+# Add/remove one_energy functions START
+run_one_energy("4.3;AuAu")
+run_one_energy("6.4;PbPb")
+run_one_energy("7.7;AuAu")
+run_one_energy("8.8;PbPb")
+run_one_energy("17.3;PbPb")
+run_one_energy("27.0;AuAu")
+run_one_energy("39.0;AuAu")
+run_one_energy("62.4;AuAu")
+run_one_energy("130.0;AuAu")
+run_one_energy("200.0;AuAu")
+# Add/remove one_energy functions END
+Excitation_Funcs()
+Integrated_vn()
+Hydro_Lifetimes()
+run_custom_hybrid()
+# Add/remove test_hybrid functions START
+test_hybrid("7.7;AuAu")
+# Add/remove test_hybrid functions END
+EoF
+
+cat > "parameterFile.txt" <<EoF
+set(VAL_NUM_RUNS_ONE_ENERGY "100") # num runs for run_one_energy function. Default 100
+set(VAL_NUM_RUNS_CUSTOM_HYBRID "100") # num runs for run_custom_hybrid function. Default 100.
+set(VAL_NUM_RUNS_TEST_HYBRID "4") # num runs for run_custom_hybrid function. Default 4.
+set(VAL_NUM_EVENTS_AFTERBURNER_ENERGY "1000") # num runs for run_custom_hybrid function. Default 1000.
+set(VAL_NUM_EVENTS_AFTERBURNER_CUSTOM "1000") # num runs for run_custom_hybrid function. Default 1000.
+set(VAL_NUM_EVENTS_AFTERBURNER_TEST "50") # num runs for run_custom_hybrid function. Default 50.
+EoF
+
+  echo "testFile.txt and parameterFile.txt have been created. Edit them according to your needs and then run command"
+  echo "    smashVHLLEhybrid -t testFile.txt -p parameterFile.txt"
+  echo "Lines starting with '#' are comment lines, parameters not set will be set to default values."
+}
+
+function run_cmake()
+{
+  # we are sure we have test file
+  export ADDITIONAL_FLAGS="-DSMASH_ANALYSES='$testFile'"
+  # if user provided parameters, add them as well
+  if [[ ! -z ${parameterFile} ]];then
+    export ADDITIONAL_FLAGS=" -DSMASH_SETTINGS='$parameterFile' $ADDITIONAL_FLAGS"
+  fi
+
+$CMAKE_ROOT/bin/cmake $SMASH_PACK_ROOT/share/smashVHLLEhybrid \
+                      ${ADDITIONAL_FLAGS}                  \
+                      -DVHLLE_ROOT=$VHLLE_ROOT             \
+                      -DSMASH_PACK_ROOT=$SMASH_PACK_ROOT
+}
+
+main "$@"

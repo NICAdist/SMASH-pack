@@ -8,10 +8,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
    message(FATAL_ERROR "You don't want to configure in the source directory!")
 endif()
 
-## Tell cmake where to find our modules
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
-
 # smash executable:
 # $SMASH_PACK_ROOT/bin/smash
 
