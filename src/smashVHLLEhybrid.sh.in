@@ -12,6 +12,7 @@ main () {
 
   if [ "$VALID_ARGUMENTS" -eq 0 ]; then
     print_usage
+    exit 0
   fi
 
   eval set -- "$OPTS"
