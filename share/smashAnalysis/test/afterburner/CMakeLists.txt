@@ -140,19 +140,13 @@ else() # plot with experimental data
   )
 endif(NOT WITH_EXP_DATA)
 
-
 # Target for all simulations
-add_custom_target(afterburner_sims
-    DEPENDS ${all_data_files}
-)
+add_custom_target(afterburner_sims DEPENDS ${all_data_files})
 
 # Target for the analysis
-add_custom_target(afterburner_analysis
-    DEPENDS ${all_analysis_outputs}
-)
+add_custom_target(afterburner_analysis DEPENDS ${all_analysis_outputs})
 
 # Target for plotting
 add_custom_target(afterburner_plots DEPENDS ${plot})
-
 
 add_custom_target(afterburner DEPENDS afterburner_sims afterburner_analysis afterburner_plots)

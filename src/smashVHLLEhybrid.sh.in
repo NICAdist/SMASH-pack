@@ -12,6 +12,7 @@ main () {
 
   if [ "$VALID_ARGUMENTS" -eq 0 ]; then
     print_usage
+    exit 0
   fi
 
   eval set -- "$OPTS"
@@ -114,8 +115,9 @@ function run_cmake()
   fi
 
 $CMAKE_ROOT/bin/cmake $SMASH_PACK_ROOT/share/smashVHLLEhybrid \
-                      ${ADDITIONAL_FLAGS}                  \
-                      -DVHLLE_ROOT=$VHLLE_ROOT             \
+                      ${ADDITIONAL_FLAGS}                     \
+                      -DVHLLE_ROOT=$VHLLE_ROOT                \
+                      -DVHLLE_PARAMS=$VHLLE_PARAMS            \
                       -DSMASH_PACK_ROOT=$SMASH_PACK_ROOT
 }
 

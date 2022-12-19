@@ -53,3 +53,4 @@ The sources are copyied from original repositories and not linked. Therefore thi
 * removed calls to functions. They are now user-provided via file and parameter SMASH_ANALYSES
 * removed hard-coded constants. User now can either alter individual constants via -Dconstant_name or set all (subset) of constants via file and parameter SMASH_SETTINGS
 * added new folder "Progress" to results for tracking work of program and recreated dependencies in the program so that commands are called one-by one for each 'i' in cycle (allowing for make -j)
+* added -configDir path variable to allow for (vHLLE) eos directory to be placed at arbitrary place
