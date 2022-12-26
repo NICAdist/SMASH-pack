@@ -42,6 +42,8 @@ The sources are copyied from original repositories and not linked. Therefore thi
 * removed search for smash. It is expected to be in $SMASH_ROOT_PATH/bin/smash
 * removed include(FloatMath) and replaced by given function in files that needed it (2 of 3 requesting)
 * replaced ${CMAKE_BINARY_DIR}/smash by ${SMASH_PACK_ROOT}/bin/smash
+* in python_scripts/version.py replaced check for analysis version by value obtained via command
+  'git describe' obtained in SMASH-2.2ana branch of analysis (we are not inside git when running this)
 
 ## CMake smashVHLLEhybrid
 * created directory share/smashVHLLEhyubrid containing (original) configs/, python_scripts/, and CMakeLists.txt. These are copied to SMASH_PACK_ROOT/share/ during install phase
